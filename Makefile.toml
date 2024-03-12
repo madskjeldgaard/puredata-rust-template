@@ -39,10 +39,17 @@ dependencies = ["move"]
 script_runner = "@shell"
 script = [ "rm -rf ${CARGO_MAKE_CRATE_FS_NAME} *.dek*" ]
 
+# Package for Deken
 [tasks.package]
 dependencies = ["move"]
-command = "deken"
+command = "./deken/developer/deken"
 args = ["package", "-v", "${CARGO_MAKE_CRATE_VERSION}", "${CARGO_MAKE_CRATE_FS_NAME}"]
+
+# Upload to Deken
+[tasks.upload]
+dependencies = ["package"]
+command = "./deken/developer/deken"
+args = ["upload", "${CARGO_MAKE_CRATE_FS_NAME}"]
 
 [tasks.platform-env.linux]
 env = { "PLATFORM_EXTERNAL_EXT" = "pd_linux", "PLATFORM_DYLIB_EXT" = "so" }

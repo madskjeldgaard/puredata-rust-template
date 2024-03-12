@@ -1,3 +1,6 @@
 [submodule "puredata-rust"]
 	path = puredata-rust
 	url = https://github.com/x37v/puredata-rust
+[submodule "deken"]
+	path = deken
+	url = https://git.iem.at/pd/deken
