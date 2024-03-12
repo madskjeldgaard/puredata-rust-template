@@ -1,0 +1,77 @@
+# vim: set ts=4 sw=4 expandtab:
+[config]
+additional_profiles = [ "release" ]
+
+[env]
+PLATFORM_DYLIB_EXT = { source = "${CARGO_MAKE_RUST_TARGET_OS}", default_value = "so", mapping = {"macos" = "dylib", "windows" = "dll" } }
+PLATFORM_EXTERNAL_PREFIX = { source = "${CARGO_MAKE_RUST_TARGET_OS}", default_value = "l", mapping = {"linux" = "l", "macos" = "d", "windows" = "m", "openbsd" = "o", "freebsd" = "l" } }
+PLATFORM_EXTERNAL_SUFFIX = { source = "${CARGO_MAKE_RUST_TARGET_ARCH}", default_value = "ERROR", mapping = {"x86" = "i386", "x86_64" = "amd64", "arm" = "arm", "aarch64" = "arm64", "powerpc" = "ppc" } }
+PLATFORM_EXTERNAL_EXT = "${PLATFORM_EXTERNAL_PREFIX}_${PLATFORM_EXTERNAL_SUFFIX}"
+
+[env.development]
+BUILD_ARGS = "build"
+PROFILE_TARGET_DIR = "target/debug"
+
+[env.release]
+BUILD_ARGS = "build|--release"
+PROFILE_TARGET_DIR = "target/release"
+
+[tasks.echo]
+script = [
+'''
+echo PLATFORM_DYLIB_EXT: ${PLATFORM_DYLIB_EXT}
+echo PLATFORM_EXTERNAL_EXT: ${PLATFORM_EXTERNAL_EXT}
+'''
+]
+
+[tasks.build]
+args = ["@@split(BUILD_ARGS,|)"]
+
+[tasks.clean]
+dependencies = ["clean-artifacts"]
+command = "cargo"
+args = ["clean"]
+
+[tasks.post-build]
+dependencies = ["move"]
+
+[tasks.clean-artifacts]
+script_runner = "@shell"
+script = [ "rm -rf ${CARGO_MAKE_CRATE_FS_NAME} *.dek*" ]
+
+[tasks.package]
+dependencies = ["move"]
+command = "deken"
+args = ["package", "-v", "${CARGO_MAKE_CRATE_VERSION}", "${CARGO_MAKE_CRATE_FS_NAME}"]
+
+[tasks.platform-env.linux]
+env = { "PLATFORM_EXTERNAL_EXT" = "pd_linux", "PLATFORM_DYLIB_EXT" = "so" }
+private = true
+
+[tasks.platform-env.mac]
+env = { "PLATFORM_EXTERNAL_EXT" = "pd_darwin", "PLATFORM_DYLIB_EXT" = "dylib" }
+private = true
+
+[tasks.name-env]
+env = { "LIB_TILDE" = "${PROFILE_TARGET_DIR}/lib${CARGO_MAKE_CRATE_FS_NAME}_tilde.${PLATFORM_DYLIB_EXT}", "LIB" = "${PROFILE_TARGET_DIR}/lib${CARGO_MAKE_CRATE_FS_NAME}.${PLATFORM_DYLIB_EXT}", "EXTERNAL_TILDE" = "${CARGO_MAKE_CRATE_FS_NAME}~.${PLATFORM_EXTERNAL_EXT}", "EXTERNAL" = "${CARGO_MAKE_CRATE_FS_NAME}.${PLATFORM_EXTERNAL_EXT}" }
+private = true
+
+[tasks.move]
+dependencies = ["build", "name-env"]
+script_runner = "@shell"
+script = [
+    '''
+    mkdir -p ${CARGO_MAKE_CRATE_FS_NAME}
+    [ -f ${LIB_TILDE} ] && rsync -a ${LIB_TILDE} ${CARGO_MAKE_CRATE_FS_NAME}/${EXTERNAL_TILDE} || rsync -a ${LIB} ${CARGO_MAKE_CRATE_FS_NAME}/${EXTERNAL}
+    '''
+]
+
+[tasks.run.linux]
+dependencies = ["move"]
+command = "pd"
+args = ["test.pd"]
+
+[tasks.run.mac]
+dependencies = ["move"]
+command = "open"
+args = ["test.pd"]

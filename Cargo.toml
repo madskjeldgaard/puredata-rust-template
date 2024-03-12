@@ -1,0 +1,14 @@
+[package]
+name = "{{project-name}}"
+authors = ["{{authors}}"]
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "{{project-name|snake_case}}_tilde"
+crate-type = ["cdylib"]
+
+[dependencies]
+pd-sys = "0.1.1"
+pd-ext = { path = "puredata-rust/external"}
+pd-ext-macros = { path = "puredata-rust/macros"}
