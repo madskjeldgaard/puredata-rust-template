@@ -1,6 +1,6 @@
-# Generate a Rust-based plugin for PureData
+# Generate a Rust-based external for PureData
 
-This is a cargo generate template to create a project for a PureData plugin written entirely in Rust.
+This is a cargo generate template to create a PureData external written entirely in Rust.
 
 It uses [puredata-rust](https://github.com/x37v/puredata-rust).
 
