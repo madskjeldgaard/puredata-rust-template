@@ -2,7 +2,9 @@
 //!
 //! It is based on the [puredata-rust-template](https://github.com/madskjeldgaard/puredata-rust-template/) by
 //! [Mads Kjeldgaard](https://madskjeldgaard.dk/) and leverages
-//! [puredata-rust](https://github.com/x37v/puredata-rust).
+//! [puredata-rust](https://github.com/x37v/puredata-rust). An external
+//! implements a `Processor` to handle different kinds of data retrieved
+//! from the inputs and moved to the outputs.
 use pd_ext::builder::SignalProcessorExternalBuilder;
 use pd_ext::external::{SignalProcessor, SignalProcessorExternal};
 use pd_ext::pd;
