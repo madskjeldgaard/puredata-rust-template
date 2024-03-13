@@ -11,10 +11,15 @@ use pd_ext::pd;
 
 use pd_ext_macros::external;
 
+/// The type of strings to be displayed in the Pure Data log console.
 use std::ffi::CString;
 
+/// The main data-structure to hold all data that is required beyond
+/// each single frame being processed.
 struct Processor;
 
+/// Implement the required `SignalProcessor` trait to handle data send
+/// to and put out by the external.
 impl SignalProcessor for Processor {
     fn process(
         &mut self,
@@ -29,15 +34,18 @@ impl SignalProcessor for Processor {
 }
 
 external! {
+    /// Generate a (unique) name for the exernal based on the project title.
     pub struct {{project-name|upper_camel_case}};
 
     impl {{project-name|upper_camel_case}} {
+        /// Handle a bang being send to the Pure Data external.
         #[bang]
         pub fn bang(&mut self) {
             let m = CString::new(format!("hello").to_string()).expect("CString::new failed");
             pd::post(m);
         }
 
+        /// Handle a float and a symbol being send to the Pure Data external.
         #[sel(defaults=1)]
         pub fn foo(&mut self, arg1: pd_sys::t_float, arg2: pd_ext::symbol::Symbol) {
             let m =
@@ -45,6 +53,7 @@ external! {
             pd::post(m);
         }
 
+        /// Handle a float being send to the Pure Data external.
         #[sel(defaults=1)]
         pub fn bar(&mut self, arg1: pd_sys::t_float) {
             let m =
@@ -52,6 +61,7 @@ external! {
             pd::post(m);
         }
 
+        /// Handle a symbol being send to the Pure Data external.
         #[sel(defaults=1)]
         pub fn baz(&mut self, arg1: pd_ext::symbol::Symbol) {
             let m =
@@ -60,6 +70,7 @@ external! {
         }
     }
 
+    /// Create a (new) external with two inlets and three outlets.
     impl SignalProcessorExternal for {{project-name|upper_camel_case}} {
         fn new(builder: &mut dyn SignalProcessorExternalBuilder<Self>) -> Result<(Self, Box<dyn SignalProcessor>), String> {
             builder.new_signal_outlet();
