@@ -28,14 +28,22 @@ cd <project-name>
 cargo make
 ```
 
-### Running the plugin in PureData
+### Running the external in PureData
 
-At the root of the project is a .pd file you can open to test the plugin.
+At the root of the project is a .pd file you can open to test the external.
 
 Run it using cargo make:
 
 ```bash
 cargo make run
+```
+
+### Install the external
+
+If you have PlugData installed (on MacOS), this will install the external to the PlugData externals folder, otherwise the PD-externals folder in your home directory. On Linux it will simply copy it to `~/pd-externals`
+
+```bash
+cargo make install
 ```
 
 ### Making a Deken package

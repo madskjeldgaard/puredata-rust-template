@@ -82,3 +82,43 @@ args = ["test.pd"]
 dependencies = ["move"]
 command = "open"
 args = ["test.pd"]
+
+[tasks.install.mac]
+dependencies = ["move"]
+script_runner = "@shell"
+script = [
+    '''
+    # Check if plugdata directory exists
+    # If it does, use that, if not, use the PD default
+    if [ -d ~/Documents/plugdata ]; then
+        INSTALL_PATH=~/Documents/plugdata/Externals
+    else
+        INSTALL_PATH=~/Library/Pd/externals
+    fi
+
+    echo "Installing to: $INSTALL_PATH"
+
+    # Create the directory if it doesn't exist
+    mkdir -p $INSTALL_PATH
+
+    # Copy the external to the directory
+    cp -r ${CARGO_MAKE_CRATE_FS_NAME}/* $INSTALL_PATH
+    '''
+]
+
+[tasks.install.linux]
+dependencies = ["move"]
+script_runner = "@shell"
+script = [
+    '''
+    INSTALL_PATH=~/pd-externals
+
+    echo "Installing to: $INSTALL_PATH"
+
+    # Create the directory if it doesn't exist
+    mkdir -p $INSTALL_PATH
+
+    # Copy the external to the directory
+    cp -r ${CARGO_MAKE_CRATE_FS_NAME}/* $INSTALL_PATH
+    '''
+]
