@@ -40,7 +40,7 @@ cargo make run
 
 ### Install the external
 
-If you have PlugData installed (on MacOS), this will install the external to the PlugData externals folder, otherwise the Pd-externals folder in your home directory. On Linux it will simply copy it to `~/pd-externals`
+If you have [plugdata](https://plugdata.org/) installed (on MacOS), this will install the external to the plugdata externals folder, otherwise the Pd-externals folder in your home directory. On Linux it will simply copy it to `~/pd-externals`
 
 ```bash
 cargo make install
