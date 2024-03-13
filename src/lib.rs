@@ -1,3 +1,8 @@
+//! This is the (example) documentation for a pure data external.
+//!
+//! It is based on the [puredata-rust-template](https://github.com/madskjeldgaard/puredata-rust-template/) by
+//! [Mads Kjeldgaard](https://madskjeldgaard.dk/) and leverages
+//! [puredata-rust](https://github.com/x37v/puredata-rust).
 use pd_ext::builder::SignalProcessorExternalBuilder;
 use pd_ext::external::{SignalProcessor, SignalProcessorExternal};
 use pd_ext::pd;
