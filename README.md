@@ -26,9 +26,14 @@ cd <project-name>
 
 Please note: All build commands use the debug profile by default. For DSP, this is EXTREMELY slow. Therefore, make sure to use the release profile correctly when you need to have an optimized version of your external.
 
+For debug builds: 
 
 ```bash
-cargo make
+cargo make build
+```
+
+```bash
+cargo make --profile release build
 ```
 
 ### Running the external in PureData
