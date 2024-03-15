@@ -1,1 +1,4 @@
 /target
+
+# Ignore output folder
+{{project-name}}

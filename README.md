@@ -24,11 +24,14 @@ cd <project-name>
 
 ### Building
 
+Please note: All build commands use the debug profile by default. For DSP, this is EXTREMELY slow. Therefore, make sure to use the release profile correctly when you need to have an optimized version of your external.
+
+
 ```bash
 cargo make
 ```
 
-### Running the external in Pure Data
+### Running the external in PureData
 
 At the root of the project is a .pd file you can open to test the external.
 
@@ -38,12 +41,18 @@ Run it using cargo make:
 cargo make run
 ```
 
+If you want to run the release version:
+
+```bash
+cargo make --profile release run
+```
+
 ### Install the external
 
 If you have [plugdata](https://plugdata.org/) installed (on MacOS), this will install the external to the plugdata externals folder, otherwise the Pd-externals folder in your home directory. On Linux it will simply copy it to `~/pd-externals`
 
 ```bash
-cargo make install
+cargo make --profile release install
 ```
 
 ### Making a Deken package
@@ -51,11 +60,11 @@ cargo make install
 The make file also includes a task to create a Deken package to be used in the [Pure Data externals database](https://deken.puredata.info/).
 
 ```bash
-cargo make package
+cargo make --profile release package
 ```
 
 ### Upload to Deken
 
 ```bash
-cargo make upload
+cargo make --profile release upload
 ```
